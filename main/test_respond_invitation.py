@@ -5,15 +5,16 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mycalendar.settings')
 django.setup()
 
 
-from django.test import TestCase, RequestFactory
+from django.test import TestCase, RequestFactory, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.core import mail
 from main.models import Event
 from main.views import respond_invitation
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from unittest.mock import patch
 
+#Write Unit Tests for Guest RSVP functionality
 class RespondInvitationTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
@@ -58,3 +59,29 @@ class RespondInvitationTestCase(TestCase):
         self.assertFalse(
             self.event.invited_users.filter(pk=self.user.pk).exists())
         self.assertEqual(len(mock_send_mail.call_args_list), 1)
+
+#Conduct unit testing for Guest RSVP endpoints
+class RSVPTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='password123')
+        self.event = Event.objects.create(
+            title='Test Event',
+            date=date.today(),
+            start_time='12:00:00',
+            end_time='14:00:00',
+            creator=self.user
+        )
+        self.client = Client()
+
+
+    def test_invitations_page_unauthenticated(self):
+        response = self.client.get(reverse('invitations_page'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_respond_invitation_invalid_response(self):
+        response = self.client.post(reverse('respond_invitation', args=[self.event.id]), {'response': 'invalid'})
+        self.assertEqual(response.status_code, 302)
+
+    def test_respond_invitation_invalid_event_id(self):
+        response = self.client.post(reverse('respond_invitation', args=[999]), {'response': 'accepted'})
+        self.assertEqual(response.status_code, 302)

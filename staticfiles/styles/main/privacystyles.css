@@ -1,0 +1,31 @@
+body
+{
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+
+    background-image: url("");
+    background-repeat: no-repeat;
+}
+
+.button
+{
+    background-color: none;
+    border: none;
+    color: grey;
+    border: 2px solid #e7e7e7;
+    padding: 4px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 6px;
+    margin: 4px 2px;
+    cursor: pointer;
+
+}
+
+h2
+{
+    text-align: center;
+}

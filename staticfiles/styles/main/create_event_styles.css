@@ -1,0 +1,95 @@
+body
+{
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+
+    background-image: url("");
+    background-repeat: no-repeat;
+}
+
+.button
+{
+    background-color: none;
+    border: none;
+    color: grey;
+    border: 2px solid #e7e7e7;
+    padding: 4px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 6px;
+    margin: 4px 2px;
+    cursor: pointer;
+
+}
+
+.create-event-form {
+    max-width: 500px;
+    margin: 30px auto 0;
+    padding: 20px;
+    background-color: #b4b4b4;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.create-event-form:hover {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.create-event-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.create-event-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.create-event-form input[type="text"],
+.create-event-form input[type="date"],
+.create-event-form input[type="time"],
+.create-event-form select,
+.create-event-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.create-event-form input[type="text"]:focus,
+.create-event-form input[type="date"]:focus,
+.create-event-form input[type="time"]:focus,
+.create-event-form select:focus,
+.create-event-form textarea:focus {
+    outline: none;
+    border-color: rgba(25, 31, 52, 0.6);
+}
+
+.create-event-form .button-container {
+    text-align: center; /* Center align content */
+}
+
+
+.create-event-form button[type="submit"] {
+    background-color: #e7e7e7;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.create-event-form button[type="submit"]:hover {
+    background-color: #ccc;
+    color: #fff;
+}

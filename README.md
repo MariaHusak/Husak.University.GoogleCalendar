@@ -351,16 +351,25 @@ Document CI/CD processes and best practices for future reference.
 - Conduct unit testing for Event Editing endpoints ✔️
 
 ### Week 11:
-- Implement feature: Customizable Event Categories
-- Prepare for project deployment
-- Conduct final round of testing and bug fixes
-- Write Unit Tests for Customizable Event Categories
-- Conduct unit testing for Guest RSVP endpoints
+- Implement feature: Customizable Event Categories ✔️
+- Prepare for project deployment ✔️
+- Conduct final round of testing and bug fixes ✔️
+- Write Unit Tests for Customizable Event Categories ✔️
+- Conduct unit testing for Guest RSVP endpoints ✔️
 
 ### Week 12:
-- Implement feature: Welcome Email
-- Finalize deployment and release
-- Conduct post-release monitoring and support
-- Conduct retrospective meeting for project review
-- Write Unit Tests for remaining functionalities
-- Conduct unit testing for Sharing Calendars endpoints
+- Implement feature: Welcome Email ✔️
+- Finalize deployment and release ✔️
+- Conduct post-release monitoring and support ✔️
+- Write Unit Tests for remaining functionalities ✔️
+- Write Unit Tests for Welcome Email ✔️
+
+## Anti-Lab 2
+- Dmytro Bilyk
+- https://github.com/DmBilyk/Bilyk.University.Online-Meditation-and-Mindfulness-Community 
+- https://github.com/DmBilyk/Husak.University.Google-Calendar/pull/1
+  
+- Volodymyr Demchyshyn
+- https://github.com/Demch-volodymyr/Demchyshyn.University.Binance
+- https://github.com/Demch-volodymyr/Husak.University.Google-Calendar/pull/1
+

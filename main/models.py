@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 class Event(models.Model):
     title = models.CharField(max_length=100)
@@ -39,4 +40,10 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
+    def clean(self):
+        if self.start_time >= self.end_time:
+            raise ValidationError("Start time must be earlier than end time.")
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)

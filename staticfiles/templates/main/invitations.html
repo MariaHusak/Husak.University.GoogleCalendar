@@ -1,0 +1,46 @@
+{% extends 'main/general.html' %}
+
+{% block title %}Invitations{% endblock %}
+
+{% block css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/main/invitations_styles.css' %}">
+{% endblock %}
+
+{% block maincontent %}
+<div class="image {% if not invited_events %}no-invitations{% endif %}">
+    <h2>Invitations</h2>
+
+    {% if invited_events %}
+    <div class="event-container">
+        {% for event in invited_events %}
+        <div class="event">
+            <h3>{{ event.title }}</h3>
+            <p>Date: {{ event.date }}</p>
+            <p>Time: {{ event.start_time }} - {{ event.end_time }}</p>
+            <p>Location: {{ event.location }}</p>
+            <p>Organizer: {{ event.creator.username }}</p>
+            <p>Description: {{ event.description }}</p>
+            {% if user in event.invited_users.all %}
+            <div class="button-container">
+                <form class="accept_invitation" method="post" action="{% url 'respond_invitation' event.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="response" value="accepted">
+                    <button type="submit">Accept Invitation</button>
+                </form>
+                <form class="decline_invitation" method="post" action="{% url 'respond_invitation' event.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="response" value="declined">
+                    <button type="submit">Decline Invitation</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h5>No invitations.</h5>
+    {% endif %}
+</div>
+
+{% endblock %}
