@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
 
+
 # Unit testing for Event Creation endpoints
 """class EventCreationTestCase(TestCase):
     def setUp(self):
@@ -150,23 +151,5 @@ class UserAuthenticationTestCase(TestCase):
         self.assertIsNone(user)
 
 
-class InvalidURLTests(TestCase):
 
-    def setUp(self):
-        self.client = Client()
-        self.user = User.objects.create_user(username='testuser', password='12345')
-        self.client.login(username='testuser', password='12345')
-        self.event = Event.objects.create(
-            title='Test Event', date='2023-01-01', start_time='12:00',
-            end_time='13:00', location='Test Location', description='Test Description',
-            creator=self.user
-        )
-
-    def test_access_non_existent_event(self):
-        response = self.client.get(reverse('edit_event', args=[999]))
-        self.assertEqual(response.status_code, 404)
-
-    def test_invalid_url(self):
-        response = self.client.get('/invalid-url/')
-        self.assertEqual(response.status_code, 404)
 

@@ -1,18 +1,19 @@
+from django.shortcuts import render
 import calendar
 from datetime import datetime, timedelta
 from django.http import JsonResponse, HttpResponse
 from .models import Event
 import logging
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail, BadHeaderError
 from django.core.exceptions import ValidationError
-from django.shortcuts import get_object_or_404, redirect, render
-from .forms import EventForm
-from django.utils.dateparse import parse_date
 from dateutil.relativedelta import relativedelta
-from django.contrib.auth.signals import user_logged_in
-from django.dispatch import receiver
+from django.shortcuts import get_object_or_404, redirect
+from .forms import EventForm
+from django.views.decorators.http import require_GET
+from django.urls import reverse
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -75,6 +76,7 @@ def display_calendar(request, year=None, month=None):
                                                   'year_name': year_name, 'next_month': next_month,
                                                   'prev_month': prev_month, 'events': event_data})
 
+
 @login_required
 def create_event(request):
     if request.method == 'POST':
@@ -94,34 +96,29 @@ def create_event(request):
             return JsonResponse({'success': False, 'error': 'Incomplete event data'}, status=400)
 
         try:
-            event = Event.objects.create(
-                title=event_title, date=event_date, start_time=start_time,
-                end_time=end_time, location=event_location, description=event_description,
-                creator=creator, recurrence=recurrence, category=event_category
-            )
-
+            event = Event.objects.create(title=event_title, date=event_date, start_time=start_time,
+                                         end_time=end_time, location=event_location, description=event_description,
+                                         creator=creator, recurrence=recurrence, category=event_category)
             if recurrence:
-                if recurrence in ['daily', 'weekly', 'monthly', 'yearly']:
+                if recurrence == 'daily':
+                    delta = relativedelta(days=1)
+                elif recurrence == 'weekly':
+                    delta = relativedelta(weeks=1)
+                elif recurrence == 'monthly':
+                    delta = relativedelta(months=1)
+                elif recurrence == 'yearly':
+                    delta = relativedelta(years=1)
+                else:
                     delta = None
-                    if recurrence == 'daily':
-                        delta = relativedelta(days=1)
-                    elif recurrence == 'weekly':
-                        delta = relativedelta(weeks=1)
-                    elif recurrence == 'monthly':
-                        delta = relativedelta(months=1)
-                    elif recurrence == 'yearly':
-                        delta = relativedelta(years=1)
 
-                    if delta:
-                        end_date = parse_date(event_date) + relativedelta(years=1)
-                        current_date = parse_date(event_date) + delta
-                        while current_date <= end_date:
-                            Event.objects.create(
-                                title=event_title, date=current_date, start_time=start_time,
-                                end_time=end_time, location=event_location, description=event_description,
-                                creator=creator, recurrence=recurrence, category=event_category
-                            )
-                            current_date += delta
+                if delta:
+                    event_date = datetime.strptime(event_date, '%Y-%m-%d').date()
+                    end_date = datetime.today().date() + relativedelta(years=1)
+                    while event_date < end_date:
+                        new_event = Event.objects.create(title=event_title, date=event_date, start_time=start_time,
+                                                         end_time=end_time, location=event_location,
+                                                         description=event_description,
+                                                         creator=creator, recurrence=recurrence)
 
             for email in invited_emails:
                 try:
@@ -144,15 +141,15 @@ def create_event(request):
                     logger.error(f'Validation error occurred while sending email to {email}: {str(e)}')
 
             return redirect('calendar')
-        except ValidationError as ve:
-            logger.error(f'Validation error while creating event: {str(ve)}')
-            return JsonResponse({'success': False, 'error': ve.message_dict}, status=400)
         except Exception as e:
+            if event:
+                event.delete()
             logger.error(f'Failed to create event: {str(e)}')
             return JsonResponse({'success': False, 'error': 'Failed to create event'}, status=500)
     else:
         form = EventForm()
         return render(request, 'main/create_event.html', {'form': form})
+
 
 
 @login_required
@@ -166,7 +163,6 @@ def edit_event(request, event_id):
     else:
         form = EventForm(instance=event)
     return render(request, 'main/edit_event.html', {'form': form, 'event_id': event_id})
-
 
 @login_required
 def invitations_page(request):
@@ -238,13 +234,3 @@ def search_suggestions(request):
         return JsonResponse(suggestions_data, safe=False)
     else:
         return JsonResponse([], safe=False)
-
-@receiver(user_logged_in)
-def send_welcome_email(sender, user, request, **kwargs):
-        send_mail(
-            'Welcome to Mary Calendar',
-            f'Hello {user.username},\n\nWelcome to Mary Calendar! We are excited to see you. If you have any questions or need assistance, feel free to reach out to our support team.\n\nBest regards,\nThe Team',
-            'husakmaria74@gmail.com',
-            [user.email],
-            fail_silently=False,
-        )
