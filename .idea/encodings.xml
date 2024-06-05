@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+<<<<<<< HEAD
+    <file url="file://$PROJECT_DIR$/../../Завантаження/db.sqlite3" charset="UTF-16" />
+=======
+>>>>>>> c866bedd027a8b198e4b9fa23c720384c52c2676
+    <file url="file://$PROJECT_DIR$/mycalendar/db.sqlite3" charset="windows-1251" />
+  </component>
+</project>

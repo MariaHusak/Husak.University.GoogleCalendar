@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <title>{% block title %} {% endblock title%}</title>
+    {% block css %} {% endblock css%}
+</head>
+<body>
+
+   <div>
+    {% load socialaccount %}
+    <a href="{% url 'home' %}" class="button"><h1>Home</h1></a>
+    <a href="{% url 'privacy' %}" class="button"><h1>Privacy</h1></a>
+    <a href="{% url 'calendar' %}" class="button"><h1>Calendar</h1></a>
+    <a href="{% url 'invitations_page' %}" class="button"><h1>Invitations</h1></a>
+    <a href="{% url 'create_event' %}" class="button"><h1>Create Event</h1></a>
+    <a href="{% url 'search_events' %}" class="button"><h1>Search Events</h1></a>
+    <a href="{% provider_login_url 'google' %}" class="button"><h1>Sign in with Google</h1></a>
+    </div>
+
+
+    {% block maincontent %}
+
+    {% endblock %}
+</body>
+    {% block scripts %}
+    {% endblock %}
+
+    {% block style %}
+    {% endblock %}
+</html>

@@ -1,0 +1,18 @@
+{% extends 'main/general.html' %}
+    {% block css %}
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'styles/main/indexstyles.css' %}">
+    {% endblock %}
+
+{% block title %} Google-Calendar {% endblock %}
+
+{% load socialaccount %}
+{% block maincontent %}
+
+    <div>
+        <h2>Google-Calendar</h2>
+    </div>
+
+    <footer>
+    </footer>
+{% endblock %}
