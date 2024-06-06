@@ -64,10 +64,9 @@ EMAIL_BACKEND = os.environ.get('django.core.mail.backends.smtp.EmailBackend')
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'husakmaria74@gmail.com'
-EMAIL_HOST_PASSWORD = 'gzns kvwo aglb hkhk'
-DEFAULT_FROM_EMAIL = 'husakmaria74@gmail.com'
-
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_HOST")
 
 
 
@@ -138,8 +137,9 @@ WSGI_APPLICATION = 'mycalendar.wsgi.application'
 
 
 DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3','NAME': BASE_DIR / 'db.sqlite3',}}
-"TODO"
-DATABASES["default"] = dj_database_url.parse("postgres://marycalendar_user:j2gpkwkxk7YhX3jl6IsFKaOZ2iLcxiS7@dpg-cpgm51sf7o1s738h5ehg-a.oregon-postgres.render.com/marycalendar")
+
+database_url = os.environ.get("DATABASE_URL")
+DATABASES["default"] = dj_database_url.parse(database_url)
 
 
 # Password validation
@@ -213,8 +213,8 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-"TODO"
-exporter = AzureMonitorTraceExporter(connection_string="InstrumentationKey=5ba07293-a0c1-4ba6-a705-2067166f6e42;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=ebf58740-15a1-447c-9ec7-0eb2faa49e6e")
+instrumentation_key = os.environ.get("InstrumentationKey")
+exporter = AzureMonitorTraceExporter(connection_string=instrumentation_key)
 
 tracer_provider = TracerProvider(resource=Resource.create({}),)
 tracer_provider.add_span_processor(BatchSpanProcessor(exporter))
