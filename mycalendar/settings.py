@@ -64,13 +64,13 @@ EMAIL_BACKEND = os.environ.get('django.core.mail.backends.smtp.EmailBackend')
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_USER = 'husakmaria74@gmail.com'
+EMAIL_HOST_PASSWORD = 'gzns kvwo aglb hkhk'
+DEFAULT_FROM_EMAIL = 'husakmaria74@gmail.com'
 
 
 
-ALLOWED_HOSTS = ['marycalendar.azurewebsites.net', 'localhost', '127.0.0.1', '*']
+ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = ['https://marycalendar.azurewebsites.net']
 
