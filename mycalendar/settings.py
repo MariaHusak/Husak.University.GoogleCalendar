@@ -137,31 +137,30 @@ WSGI_APPLICATION = 'mycalendar.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-"""DATABASES = {
-    'default': {
-        'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'mycalendar',
-        'USER': 'mariia.husak@lnu.edu.ua',
-        'PASSWORD': '',
-        'HOST': 'mycalendar.database.windows.net',
-        'PORT': '1433',
-        'OPTIONS': {
-            'driver': 'ODBC Driver 18 for SQL Server',
-            'Authentication': 'ActiveDirectoryInteractive',
-        },
+import environ
+import sys
+
+environ.Env.DB_SCHEMES['mssql'] = 'mssql'
+env = environ.Env(DEBUG=(bool,False))
+DEFAULT_DATABASE_URL = 'mssql://mariia:samsungA6.@mycalendar.database.windows.net/mariiacalendar?driver=ODBC+Driver+17+for+SQL+Server'
+
+DATABASE_URL = os.environ.get('DATABASE_URL', DEFAULT_DATABASE_URL)
+os.environ['DJANGO_DATABASE_URL'] = DATABASE_URL.format(**os.environ)
+
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
     }
-}
-"""
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+else:
+    DATABASES = {
+        'default': env.db('DJANGO_DATABASE_URL', default=DEFAULT_DATABASE_URL)
     }
-}
+#DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3','NAME': BASE_DIR / 'db.sqlite3',}}
 
-DATABASES["default"] = dj_database_url.parse("postgres://marycalendar_user:j2gpkwkxk7YhX3jl6IsFKaOZ2iLcxiS7@dpg-cpgm51sf7o1s738h5ehg-a.oregon-postgres.render.com/marycalendar")
+#DATABASES["default"] = dj_database_url.parse("postgres://marycalendar_user:j2gpkwkxk7YhX3jl6IsFKaOZ2iLcxiS7@dpg-cpgm51sf7o1s738h5ehg-a.oregon-postgres.render.com/marycalendar")
 
 
 """DATABASES = {
