@@ -12,12 +12,12 @@ django.setup()
 from django.contrib.auth.models import User
 
 def main():
-    superuser = User.objects.filter(is_superuser=True).first()
+    """superuser = User.objects.filter(is_superuser=True).first()
     if superuser:
         print("Superuser Username:", superuser.username)
         print("Superuser Password (Hashed):", superuser.password)
     else:
-        print("No superuser found.")
+        print("No superuser found.")"""
 
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mycalendar.settings')

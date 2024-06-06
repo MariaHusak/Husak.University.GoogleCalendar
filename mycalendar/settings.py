@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+import dj_database_url
 import os
 from pathlib import Path
 from opentelemetry.instrumentation.django import DjangoInstrumentor
@@ -18,6 +19,7 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry import trace
 from azure.monitor.opentelemetry.exporter import AzureMonitorTraceExporter
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,8 +78,6 @@ CSRF_TRUSTED_ORIGINS = ['https://marycalendar.azurewebsites.net']
 
 
 # Application definition
-
-
 
 INSTALLED_APPS = [
     'main',
@@ -160,6 +160,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+DATABASES["default"] = dj_database_url.parse("postgres://marycalendar_user:j2gpkwkxk7YhX3jl6IsFKaOZ2iLcxiS7@dpg-cpgm51sf7o1s738h5ehg-a.oregon-postgres.render.com/marycalendar")
 
 
 """DATABASES = {
