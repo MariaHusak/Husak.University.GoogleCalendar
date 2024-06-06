@@ -366,10 +366,7 @@ Document CI/CD processes and best practices for future reference.
 
 ## Anti-Lab 2
 - Dmytro Bilyk
-- https://github.com/DmBilyk/Bilyk.University.Online-Meditation-and-Mindfulness-Community 
+- https://github.com/DmBilyk/Bilyk.University.Online-Meditation-and-Mindfulness-Community
 - https://github.com/DmBilyk/Husak.University.Google-Calendar/pull/1
-  
-- Volodymyr Demchyshyn
-- https://github.com/Demch-volodymyr/Demchyshyn.University.Binance
-- https://github.com/Demch-volodymyr/Husak.University.Google-Calendar/pull/1
+
 

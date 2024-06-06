@@ -137,28 +137,41 @@ WSGI_APPLICATION = 'mycalendar.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-import environ
-import sys
-
-environ.Env.DB_SCHEMES['mssql'] = 'mssql'
-env = environ.Env(DEBUG=(bool,False))
-DEFAULT_DATABASE_URL = 'mssql://mariia:samsungA6.@mycalendar.database.windows.net/mycalendar?driver=ODBC+Driver+17+for+SQL+Server'
-
-DATABASE_URL = os.environ.get('DATABASE_URL', DEFAULT_DATABASE_URL)
-os.environ['DJANGO_DATABASE_URL'] = DATABASE_URL.format(**os.environ)
-
-if 'test' in sys.argv:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': ':memory:',
-        }
+"""DATABASES = {
+    'default': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'mycalendar',
+        'USER': 'mariia.husak@lnu.edu.ua',
+        'PASSWORD': '',
+        'HOST': 'mycalendar.database.windows.net',
+        'PORT': '1433',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 18 for SQL Server',
+            'Authentication': 'ActiveDirectoryInteractive',
+        },
     }
-else:
-    DATABASES = {
-        'default': env.db('DJANGO_DATABASE_URL', default=DEFAULT_DATABASE_URL)
-    }
+}
+"""
 
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+
+"""DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'testdb',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': '45.76.42.234',
+        'PORT': '5432',
+    }
+}"""
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -192,6 +205,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+"""CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 300"""
 
 
 
