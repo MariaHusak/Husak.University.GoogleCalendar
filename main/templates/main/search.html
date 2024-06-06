@@ -5,15 +5,14 @@
     <link rel="stylesheet" href="{% static 'styles/main/search_style.css' %}">
 {% endblock %}
 
-
 {% block maincontent %}
 <div class="search-container">
     <input type="text" id="search-input" placeholder="Search events..." autocomplete="off">
     <p id="search-description"></p>
 </div>
+<div id="suggestion-container"></div>
 <div id="search-results">
     <dl>
-
     </dl>
 </div>
 {% endblock %}
@@ -42,6 +41,7 @@ function displaySearchSuggestions(suggestions) {
         suggestions.forEach(function(event) {
             var listItem = document.createElement('dt');
             var title = event.title;
+            var date = event.date;
             var startTime = event.start_time;
             var endTime = event.end_time;
             var location = event.location;
@@ -50,7 +50,7 @@ function displaySearchSuggestions(suggestions) {
             listItem.innerHTML = `
                 <button type="button" class="suggestion-button">
                     <span class="suggestion-title">${title}</span><br>
-                    <span class="suggestion-info">Start Time: ${startTime} | End Time: ${endTime} | Location: ${location} | Description: ${description}</span>
+                    <span class="suggestion-info">Date: ${date} | Start Time: ${startTime} | End Time: ${endTime} | Location: ${location} | Description: ${description}</span>
                 </button>
             `;
 
