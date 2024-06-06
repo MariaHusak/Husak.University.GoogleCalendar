@@ -29,7 +29,8 @@ class RespondInvitationTestCase(TestCase):
             creator=self.creator,
             date=start_time.date(),
             start_time=start_time.time(),
-            end_time=end_time.time()
+            end_time=end_time.time(),
+            description='This is a test event.'
         )
         self.event.invited_users.add(self.user)
         self.event.save()
@@ -46,7 +47,6 @@ class RespondInvitationTestCase(TestCase):
         self.assertTrue(self.event.attendees.filter(pk=self.user.pk).exists())
         self.assertEqual(len(mock_send_mail.call_args_list), 1)
 
-
     @patch('main.views.send_mail')
     def test_decline_invitation(self, mock_send_mail):
         url = reverse('respond_invitation', kwargs={'event_id': self.event.pk})
@@ -56,8 +56,7 @@ class RespondInvitationTestCase(TestCase):
         response = respond_invitation(request, event_id=self.event.pk)
 
         self.assertEqual(response.status_code, 302)
-        self.assertFalse(
-            self.event.invited_users.filter(pk=self.user.pk).exists())
+        self.assertFalse(self.event.invited_users.filter(pk=self.user.pk).exists())
         self.assertEqual(len(mock_send_mail.call_args_list), 1)
 
 #Conduct unit testing for Guest RSVP endpoints
@@ -69,10 +68,10 @@ class RSVPTestCase(TestCase):
             date=date.today(),
             start_time='12:00:00',
             end_time='14:00:00',
-            creator=self.user
+            creator=self.user,
+            description='This is a test event.'
         )
         self.client = Client()
-
 
     def test_invitations_page_unauthenticated(self):
         response = self.client.get(reverse('invitations_page'))

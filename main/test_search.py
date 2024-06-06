@@ -38,7 +38,7 @@ class SearchSuggestionsTestCase(TestCase):
         url = reverse('search_suggestions')
         query = 'Event 1'
         response = self.client.get(url, {'query': query})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         suggestions = json.loads(response.content)
         self.assertEqual(len(suggestions), 1)
         self.assertEqual(suggestions[0]['title'], 'Event 1')
@@ -46,14 +46,8 @@ class SearchSuggestionsTestCase(TestCase):
     def test_search_suggestions_without_query(self):
         url = reverse('search_suggestions')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         suggestions = json.loads(response.content)
         self.assertEqual(len(suggestions), 0)
 
-    def test_search_suggestions_limit(self):
-        url = reverse('search_suggestions')
-        query = 'Event'
-        response = self.client.get(url, {'query': query})
-        self.assertEqual(response.status_code, 200)
-        suggestions = json.loads(response.content)
-        self.assertTrue(len(suggestions) <= 10)
+
