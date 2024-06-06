@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = 'django-insecure-#^a095n96qp0demcyty4*=57!p5owx#1s8+dy+ix5yi05#er16'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -60,7 +60,8 @@ LOGGING = {
     },
 }
 
-EMAIL_BACKEND = os.environ.get('django.core.mail.backends.smtp.EmailBackend')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
@@ -70,7 +71,8 @@ DEFAULT_FROM_EMAIL = 'husakmaria74@gmail.com'
 
 
 
-ALLOWED_HOSTS = ['*']
+
+ALLOWED_HOSTS = ['marycalendar.azurewebsites.net', 'localhost', '127.0.0.1', '*']
 
 CSRF_TRUSTED_ORIGINS = ['https://marycalendar.azurewebsites.net']
 
@@ -138,9 +140,19 @@ WSGI_APPLICATION = 'mycalendar.wsgi.application'
 
 DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3','NAME': BASE_DIR / 'db.sqlite3',}}
 
-database_url = os.environ.get("DATABASE_URL")
-DATABASES["default"] = dj_database_url.parse(database_url)
+DATABASES["default"] = dj_database_url.parse("postgres://marycalendar_user:j2gpkwkxk7YhX3jl6IsFKaOZ2iLcxiS7@dpg-cpgm51sf7o1s738h5ehg-a.oregon-postgres.render.com/marycalendar")
 
+
+"""DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'testdb',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': '45.76.42.234',
+        'PORT': '5432',
+    }
+}"""
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -173,6 +185,12 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+"""CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 300"""
 
 
 
@@ -213,8 +231,8 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-instrumentation_key = os.environ.get("InstrumentationKey")
-exporter = AzureMonitorTraceExporter(connection_string=instrumentation_key)
+
+exporter = AzureMonitorTraceExporter(connection_string="InstrumentationKey=5ba07293-a0c1-4ba6-a705-2067166f6e42;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=ebf58740-15a1-447c-9ec7-0eb2faa49e6e")
 
 tracer_provider = TracerProvider(resource=Resource.create({}),)
 tracer_provider.add_span_processor(BatchSpanProcessor(exporter))
