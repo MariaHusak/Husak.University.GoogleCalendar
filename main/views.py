@@ -1,7 +1,7 @@
 import calendar
 from datetime import datetime, timedelta
 from django.http import JsonResponse, HttpResponse
-from .models import Event
+from .models import Event, SharedCalendar
 import logging
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -13,6 +13,7 @@ from django.utils.dateparse import parse_date
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -53,7 +54,10 @@ def display_calendar(request, year=None, month=None):
     user = request.user
     creator_events = Event.objects.filter(date__year=year, date__month=month, creator=user)
     invited_events = Event.objects.filter(date__year=year, date__month=month, attendees=user, invited_users=user)
-    all_events = creator_events | invited_events
+    shared_calendars = SharedCalendar.objects.filter(shared_with=user, status='accepted')
+
+    shared_events = Event.objects.filter(date__year=year, date__month=month, creator__in=[sc.owner for sc in shared_calendars])
+    all_events = creator_events | invited_events | shared_events
 
     event_data = []
     for event in all_events:
@@ -207,6 +211,7 @@ def respond_invitation(request, event_id):
 
     return redirect('calendar')
 
+@login_required
 def search_events(request):
     query = request.GET.get('query', '')
     matched_events = []
@@ -217,19 +222,21 @@ def search_events(request):
         logger.info(f"Search query: {query}")
 
         matched_events = Event.objects.filter(
-            title__icontains=query
+            title__icontains=query,
+            creator=request.user
         ).distinct()
 
     return render(request, 'main/search.html', {'events': matched_events})
 
-
+@login_required
 def search_suggestions(request):
     query = request.GET.get('query', '')
 
     if query:
-        suggestions = Event.objects.filter(title__icontains=query)
+        suggestions = Event.objects.filter(title__icontains=query, creator=request.user)
         suggestions_data = [{
             'title': suggestion.title,
+            'date': suggestion.date,
             'start_time': suggestion.start_time,
             'end_time': suggestion.end_time,
             'location': suggestion.location,
@@ -238,6 +245,7 @@ def search_suggestions(request):
         return JsonResponse(suggestions_data, safe=False)
     else:
         return JsonResponse([], safe=False)
+
 
 @receiver(user_logged_in)
 def send_welcome_email(sender, user, request, **kwargs):
@@ -248,3 +256,58 @@ def send_welcome_email(sender, user, request, **kwargs):
             [user.email],
             fail_silently=False,
         )
+
+
+@login_required
+def share_calendar(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        can_edit = request.POST.get('can_edit') == 'on'
+
+        try:
+            user_to_share_with = User.objects.get(email=email)
+            SharedCalendar.objects.create(owner=request.user, shared_with=user_to_share_with, can_edit=can_edit)
+
+            send_mail(
+                'Calendar Sharing Request',
+                f'{request.user.username} has shared their calendar with you.',
+                'your_email@example.com',
+                [email],
+                fail_silently=False,
+            )
+
+            return redirect('calendar')
+        except User.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'User does not exist'}, status=400)
+    return render(request, 'main/share_calendar.html')
+
+@login_required
+def manage_sharing_requests(request):
+    incoming_requests = SharedCalendar.objects.filter(shared_with=request.user)
+    return render(request, 'main/manage_sharing_requests.html', {'incoming_requests': incoming_requests})
+
+@login_required
+def respond_sharing_request(request, request_id, response):
+    share_request = get_object_or_404(SharedCalendar, id=request_id)
+
+    if response == 'accept':
+        share_request.status = 'accepted'
+        share_request.save()
+    elif response == 'decline':
+        share_request.status = 'declined'
+        share_request.save()
+
+    return redirect('manage_sharing_requests')
+
+@login_required
+def stop_sharing_calendar(request, shared_user_id):
+    shared_calendar = get_object_or_404(SharedCalendar, owner=request.user, shared_with_id=shared_user_id)
+    shared_calendar.delete()
+    return redirect('calendar')
+
+@login_required
+def delete_sharing_request(request, request_id):
+    share_request = get_object_or_404(SharedCalendar, id=request_id)
+    share_request.delete()
+    return redirect('manage_sharing_requests')
+

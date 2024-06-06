@@ -1,0 +1,20 @@
+{% extends 'main/general.html' %}
+
+{% block title %} Share Calendar {% endblock %}
+
+{% block css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/main/share_calendar_styles.css' %}">
+{% endblock %}
+
+{% block maincontent %}
+<h2>Share Your Calendar</h2>
+<div class="form-container">
+    <form method="post">
+        {% csrf_token %}
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="submit">Share</button>
+    </form>
+</div>
+{% endblock %}

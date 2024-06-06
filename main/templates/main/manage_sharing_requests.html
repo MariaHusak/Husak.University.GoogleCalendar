@@ -1,0 +1,32 @@
+{% extends 'main/general.html' %}
+
+{% block title %} Share Calendar {% endblock %}
+
+{% block css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/main/manage_sharing_styles.css' %}">
+{% endblock %}
+
+{% block maincontent %}
+<h2>Accept or Decline Sharing</h2>
+  <ul>
+    {% for request in incoming_requests %}
+      <li>
+        {{ request.owner.username }} wants to share their calendar with you.
+        {% if request.status == 'pending' %}
+          <a href="{% url 'respond_sharing_request' request.id 'accept' %}" class="accept">Accept</a>
+          <a href="{% url 'respond_sharing_request' request.id 'decline' %}" class="decline">Decline</a>
+          <a href="{% url 'delete_sharing_request' request.id %}" class="delete">Delete</a>
+        {% elif request.status == 'accepted' %}
+          <span class="status accepted">Status: Accepted</span>
+          <a href="{% url 'respond_sharing_request' request.id 'decline' %}" class="decline">Decline</a>
+          <a href="{% url 'delete_sharing_request' request.id %}" class="delete">Delete</a>
+        {% elif request.status == 'declined' %}
+          <span class="status declined">Status: Declined</span>
+          <a href="{% url 'respond_sharing_request' request.id 'accept' %}" class="accept">Accept</a>
+          <a href="{% url 'delete_sharing_request' request.id %}" class="delete">Delete</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

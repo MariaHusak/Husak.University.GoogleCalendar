@@ -19,6 +19,11 @@ urlpatterns = [
     path('search-suggestions/', views.search_suggestions, name='search_suggestions'),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
+    path('share_calendar/', views.share_calendar, name='share_calendar'),
+    path('manage_sharing_requests/', views.manage_sharing_requests, name='manage_sharing_requests'),
+    path('respond_sharing_request/<int:request_id>/<str:response>/', views.respond_sharing_request, name='respond_sharing_request'),
+    path('stop_sharing_calendar/<int:shared_user_id>/', views.stop_sharing_calendar, name='stop_sharing_calendar'),
+    path('delete_sharing_request/<int:request_id>/', views.delete_sharing_request, name='delete_sharing_request'),
 ]
 
 if settings.DEBUG:

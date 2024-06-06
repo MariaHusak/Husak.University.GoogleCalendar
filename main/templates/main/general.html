@@ -19,8 +19,10 @@
     <a href="{% url 'invitations_page' %}" class="button"><h1>Invitations</h1></a>
     <a href="{% url 'create_event' %}" class="button"><h1>Create Event</h1></a>
     <a href="{% url 'search_events' %}" class="button"><h1>Search Events</h1></a>
+    <a href="{% url 'share_calendar' %}" class="button"><h1>Share Calendar</h1></a>
+    <a href="{% url 'manage_sharing_requests' %}" class="button"><h1>Manage Sharing Requests</h1></a>
     <a href="{% provider_login_url 'google' %}" class="button"><h1>Sign in with Google</h1></a>
-    </div>
+   </div>
 
 
     {% block maincontent %}

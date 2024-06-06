@@ -47,3 +47,17 @@ class Event(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
+
+class SharedCalendar(models.Model):
+    owner = models.ForeignKey(User, related_name='owned_calendars', on_delete=models.CASCADE)
+    shared_with = models.ForeignKey(User, related_name='shared_calendars', on_delete=models.CASCADE)
+    can_edit = models.BooleanField(default=False)
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('declined', 'Declined'),
+    ]
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+
+    def __str__(self):
+        return f"{self.owner.username} shared with {self.shared_with.username} ({self.status})"
