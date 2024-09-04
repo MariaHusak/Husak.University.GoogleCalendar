@@ -74,7 +74,7 @@ DEFAULT_FROM_EMAIL = 'husakmaria74@gmail.com'
 
 ALLOWED_HOSTS = ['marycalendar.azurewebsites.net', 'localhost', '127.0.0.1', '*']
 
-CSRF_TRUSTED_ORIGINS = ['https://marycalendar.azurewebsites.net']
+CSRF_TRUSTED_ORIGINS = ['https://husak-university-googlecalendar.onrender.com']
 
 
 # Application definition
@@ -138,21 +138,18 @@ WSGI_APPLICATION = 'mycalendar.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 
-DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3','NAME': BASE_DIR / 'db.sqlite3',}}
+"""DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3','NAME': BASE_DIR / 'db.sqlite3',}}
 
-DATABASES["default"] = dj_database_url.parse("postgres://marycalendar_user:j2gpkwkxk7YhX3jl6IsFKaOZ2iLcxiS7@dpg-cpgm51sf7o1s738h5ehg-a.oregon-postgres.render.com/marycalendar")
+DATABASES["default"] = dj_database_url.parse("postgres://marycalendar_user:j2gpkwkxk7YhX3jl6IsFKaOZ2iLcxiS7@dpg-cpgm51sf7o1s738h5ehg-a.oregon-postgres.render.com/marycalendar")"""
 
-
-"""DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'testdb',
-        'USER': 'postgres',
-        'PASSWORD': 'password',
-        'HOST': '45.76.42.234',
-        'PORT': '5432',
+DATABASES = {
+    "default": {
+       "ENGINE": "django.db.backends.sqlite3",
+        "NAME" : BASE_DIR / "db.sqlite3",
     }
-}"""
+}
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
